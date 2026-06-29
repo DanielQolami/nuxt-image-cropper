@@ -85,6 +85,18 @@ export default createConfigForNuxt({
         // Enforces the use of the full `v-slot` syntax in templates.
         // Throws an error if you try to use the shorthand `#` (e.g., `#header` becomes `v-slot:header`).
         "vue/v-slot-style": ["error", "longform"],
+
+        "vue/max-attributes-per-line": [
+          "warn",
+          {
+            singleline: {
+              max: 3,
+            },
+            multiline: {
+              max: 1,
+            },
+          },
+        ],
       },
     },
   ],

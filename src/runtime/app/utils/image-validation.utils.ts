@@ -32,7 +32,7 @@ function validateImageFile(
     return {
       code: "invalid-file-type",
       message: `Unsupported image type. Please choose ${accept
-        .map((type) => type.replace("image/", "").toUpperCase())
+        .map(type => type.replace("image/", "").toUpperCase())
         .join(", ")}.`,
     };
   }
@@ -65,7 +65,8 @@ function getSafeImageFileName(
   const extension = mimeType.split("/")[1] || "webp";
   const baseName = originalName
     ?.replace(/\.[^.]+$/, "")
-    .replace(/[^a-z0-9-_]+/gi, "-")
+    // @eslint-ignore
+    .replace(/[^a-z0-9-_]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .toLowerCase();
 

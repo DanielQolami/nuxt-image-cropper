@@ -43,13 +43,13 @@ interface ImageCropperDialogEmits {
 }
 
 interface ImageCropperDialogSlots {
-  title(): any;
-  description(): any;
+  title(): unknown;
+  description(): unknown;
 
-  error(props: { error: ImageCropperError }): any;
+  error(props: { error: ImageCropperError }): unknown;
 
-  cancel(props: { disabled: boolean; cancel: () => void }): any;
-  save(props: { disabled: boolean; save: () => void }): any;
+  cancel(props: { disabled: boolean; cancel: () => void }): unknown;
+  save(props: { disabled: boolean; save: () => void }): unknown;
 }
 
 const open = defineModel<boolean>("open", {
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<ImageCropperDialogProps>(), {
   showControls: true,
 });
 const emit = defineEmits<ImageCropperDialogEmits>();
-const slots = defineSlots<ImageCropperDialogSlots>();
+defineSlots<ImageCropperDialogSlots>();
 
 const cropperEl =
   useTemplateRef<InstanceType<typeof ImageCropper>>("cropper-ref");
@@ -165,10 +165,14 @@ async function handleConfirm(): Promise<void> {
 <template>
   <UModal v-model:open="open" :dismissible="true">
     <template v-slot:title>
-      <slot name="title"> Crop image </slot>
+      <slot name="title">
+        Crop image
+      </slot>
     </template>
     <template v-slot:description>
-      <slot name="description"> Adjust the image before saving. </slot>
+      <slot name="description">
+        Adjust the image before saving.
+      </slot>
     </template>
 
     <template v-slot:body>

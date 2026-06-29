@@ -24,8 +24,8 @@ interface ImageCropperDropzoneEmits {
 }
 
 interface ImageCropperDropzoneSlots {
-  label(): any;
-  description(): any;
+  label(): unknown;
+  description(): unknown;
 }
 
 const props = withDefaults(defineProps<ImageCropperDropzoneProps>(), {
@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<ImageCropperDropzoneProps>(), {
   disabled: false,
 });
 const emit = defineEmits<ImageCropperDropzoneEmits>();
-const slots = defineSlots<ImageCropperDropzoneSlots>();
+defineSlots<ImageCropperDropzoneSlots>();
 
 const selectedFile = shallowRef<File | null>(null);
 const acceptAttribute = computed(() => props.accept.join(","));
@@ -85,7 +85,9 @@ watch(selectedFile, (nextFile) => {
     :disabled="props.disabled"
   >
     <template v-slot:label>
-      <slot name="label"> Choose an image or drop it here </slot>
+      <slot name="label">
+        Choose an image or drop it here
+      </slot>
     </template>
     <template v-slot:description>
       <slot name="description">

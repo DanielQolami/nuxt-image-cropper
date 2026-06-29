@@ -66,19 +66,19 @@ interface ImageCropperEmits {
 }
 
 interface ImageCropperSlots {
-  empty(): any;
+  empty(): unknown;
 
-  zoomOut(props: { disabled: boolean; zoomOut: () => void }): any;
-  zoomIn(props: { disabled: boolean; zoomIn: () => void }): any;
-  rotateLeft(props: { disabled: boolean; rotateLeft: () => void }): any;
-  rotateRight(props: { disabled: boolean; rotateRight: () => void }): any;
-  reset(props: { disabled: boolean; reset: () => void }): any;
-  cancel(props: { disabled: boolean; cancel: () => void }): any;
+  zoomOut(props: { disabled: boolean; zoomOut: () => void }): unknown;
+  zoomIn(props: { disabled: boolean; zoomIn: () => void }): unknown;
+  rotateLeft(props: { disabled: boolean; rotateLeft: () => void }): unknown;
+  rotateRight(props: { disabled: boolean; rotateRight: () => void }): unknown;
+  reset(props: { disabled: boolean; reset: () => void }): unknown;
+  cancel(props: { disabled: boolean; cancel: () => void }): unknown;
   confirm(props: {
     disabled: boolean;
     loading: boolean;
     confirm: () => void;
-  }): any;
+  }): unknown;
 }
 
 const props = withDefaults(defineProps<ImageCropperProps>(), {
@@ -94,7 +94,7 @@ const props = withDefaults(defineProps<ImageCropperProps>(), {
   showControls: true,
 });
 const emit = defineEmits<ImageCropperEmits>();
-const slots = defineSlots<ImageCropperSlots>();
+defineSlots<ImageCropperSlots>();
 
 const labels = {
   cancel: "Cancel",
@@ -234,9 +234,9 @@ async function exportImage(
   const dataUrl = canvasToDataUrl(outputCanvas, mimeType, quality);
 
   const fileName =
-    options.fileName ??
-    props.outputFileName ??
-    getSafeImageFileName(props.sourceFile?.name, mimeType, "cropped-image");
+    options.fileName
+    ?? props.outputFileName
+    ?? getSafeImageFileName(props.sourceFile?.name, mimeType, "cropped-image");
 
   const file = new File([blob], fileName, {
     type: mimeType,
@@ -266,12 +266,14 @@ async function confirm(): Promise<void> {
     if (result) {
       emit("confirm", result);
     }
-  } catch {
+  }
+  catch {
     emit("error", {
       code: "export-error",
       message: "Something went wrong while exporting the cropped image.",
     });
-  } finally {
+  }
+  finally {
     isExporting.value = false;
   }
 }
@@ -350,7 +352,7 @@ defineExpose({
           v-if="resolvedControls.zoomOut"
           name="zoomOut"
           :disabled="disabledWithNoImage"
-          :zoomOut="zoomOut"
+          :zoom-out="zoomOut"
         >
           <UButton
             size="sm"
@@ -367,7 +369,7 @@ defineExpose({
           v-if="resolvedControls.zoomIn"
           name="zoomIn"
           :disabled="disabledWithNoImage"
-          :zoomIn="zoomIn"
+          :zoom-in="zoomIn"
         >
           <UButton
             size="sm"
@@ -384,7 +386,7 @@ defineExpose({
           v-if="resolvedControls.rotateLeft"
           name="rotateLeft"
           :disabled="disabledWithNoImage"
-          :rotateLeft="rotateLeft"
+          :rotate-left="rotateLeft"
         >
           <UButton
             size="sm"
@@ -401,7 +403,7 @@ defineExpose({
           v-if="resolvedControls.rotateRight"
           name="rotateRight"
           :disabled="disabledWithNoImage"
-          :rotateRight="rotateRight"
+          :rotate-right="rotateRight"
         >
           <UButton
             size="sm"
