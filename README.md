@@ -1,5 +1,7 @@
 # Nuxt Image Cropper
 
+npm: https://www.npmjs.com/package/nuxt-image-cropper
+
 A Nuxt 4 module for client-side image cropping with `vue-advanced-cropper`, packaged as easy-to-use components and a composable.
 
 - Auto-registers components:
