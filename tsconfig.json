@@ -2,6 +2,6 @@
   "extends": "./.nuxt/tsconfig.json",
   "exclude": ["dist", "node_modules", "playground"],
   "compilerOptions": {
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": false
   }
 }

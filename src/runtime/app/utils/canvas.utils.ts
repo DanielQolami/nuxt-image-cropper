@@ -1,7 +1,7 @@
 import type {
   ImageCropperExportOptions,
   ImageCropperOutputMimeType,
-} from "../types/image-cropper.types.ts";
+} from "../types/image-cropper.types";
 
 function canvasToBlob(
   canvas: HTMLCanvasElement,
@@ -24,7 +24,11 @@ function canvasToBlob(
   });
 }
 
-function resizeCanvas(source: HTMLCanvasElement, width: number, height: number): HTMLCanvasElement {
+function resizeCanvas(
+  source: HTMLCanvasElement,
+  width: number,
+  height: number,
+): HTMLCanvasElement {
   if (source.width === width && source.height === height) {
     return source;
   }

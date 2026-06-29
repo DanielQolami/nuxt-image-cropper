@@ -3,8 +3,8 @@ import { useObjectUrl } from "#imports";
 import type {
   ImageCropperError,
   ImageCropperValidationOptions,
-} from "../types/image-cropper.types.ts";
-import { validateImageFile } from "../utils/image-validation.utils.ts";
+} from "../types/image-cropper.types";
+import { validateImageFile } from "../utils/image-validation.utils";
 
 function useImageCropperFile(options: ImageCropperValidationOptions = {}) {
   const file = shallowRef<File | null>(null);

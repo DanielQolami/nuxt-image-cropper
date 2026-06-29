@@ -3,13 +3,13 @@ import { type HTMLAttributes, computed, shallowRef, watch } from "vue";
 import type {
   ImageCropperError,
   ImageCropperMimeType,
-} from "../types/image-cropper.types.ts";
+} from "../types/image-cropper.types";
 import {
   DEFAULT_IMAGE_CROPPER_ACCEPT,
   DEFAULT_IMAGE_CROPPER_MAX_SIZE,
   validateImageFile,
-} from "../utils/image-validation.utils.ts";
-import { cn } from "../utils/cn.utils.ts";
+} from "../utils/image-validation.utils";
+import { cn } from "../utils/cn.utils";
 
 interface ImageCropperDropzoneProps {
   accept?: readonly ImageCropperMimeType[];
@@ -85,9 +85,7 @@ watch(selectedFile, (nextFile) => {
     :disabled="props.disabled"
   >
     <template v-slot:label>
-      <slot name="label">
-        Choose an image or drop it here
-      </slot>
+      <slot name="label"> Choose an image or drop it here </slot>
     </template>
     <template v-slot:description>
       <slot name="description">

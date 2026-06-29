@@ -2,7 +2,7 @@ import type {
   ImageCropperError,
   ImageCropperMimeType,
   ImageCropperValidationOptions,
-} from "../types/image-cropper.types.ts";
+} from "../types/image-cropper.types";
 
 const DEFAULT_IMAGE_CROPPER_MAX_SIZE = 5 * 1024 * 1024;
 
@@ -32,7 +32,7 @@ function validateImageFile(
     return {
       code: "invalid-file-type",
       message: `Unsupported image type. Please choose ${accept
-        .map(type => type.replace("image/", "").toUpperCase())
+        .map((type) => type.replace("image/", "").toUpperCase())
         .join(", ")}.`,
     };
   }

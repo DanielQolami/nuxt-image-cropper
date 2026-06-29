@@ -9,12 +9,12 @@ import type {
   ImageCropperOutputMimeType,
   ImageCropperPreset,
   ImageCropperResult,
-} from "../types/image-cropper.types.ts";
+} from "../types/image-cropper.types";
 import {
   DEFAULT_IMAGE_CROPPER_ACCEPT,
   DEFAULT_IMAGE_CROPPER_MAX_SIZE,
-} from "../utils/image-validation.utils.ts";
-import { useImageCropperFile } from "../composables/useImageCropperFile.ts";
+} from "../utils/image-validation.utils";
+import { useImageCropperFile } from "../composables/useImageCropperFile";
 import type ImageCropper from "./ImageCropper.client.vue";
 
 interface ImageCropperDialogProps {
@@ -165,14 +165,10 @@ async function handleConfirm(): Promise<void> {
 <template>
   <UModal v-model:open="open" :dismissible="true">
     <template v-slot:title>
-      <slot name="title">
-        Crop image
-      </slot>
+      <slot name="title"> Crop image </slot>
     </template>
     <template v-slot:description>
-      <slot name="description">
-        Adjust the image before saving.
-      </slot>
+      <slot name="description"> Adjust the image before saving. </slot>
     </template>
 
     <template v-slot:body>

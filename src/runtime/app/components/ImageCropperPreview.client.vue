@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from "vue";
-import { cn } from "../utils/cn.utils.ts";
+import { cn } from "../utils/cn.utils";
 
 interface ImageCropperPreviewProps {
   src: string | null;
@@ -45,7 +45,7 @@ const rootClass = computed(() =>
       :src="props.src"
       :alt="props.alt"
       class="size-full object-cover"
-    >
+    />
 
     <UIcon v-else name="i-lucide-user" class="text-2xl text-muted" />
   </div>
