@@ -45,7 +45,7 @@ const rootClass = computed(() =>
       :src="props.src"
       :alt="props.alt"
       class="size-full object-cover"
-    />
+    >
 
     <UIcon v-else name="i-lucide-user" class="text-2xl text-muted" />
   </div>

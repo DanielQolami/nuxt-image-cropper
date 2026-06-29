@@ -234,9 +234,9 @@ async function exportImage(
   const dataUrl = canvasToDataUrl(outputCanvas, mimeType, quality);
 
   const fileName =
-    options.fileName ??
-    props.outputFileName ??
-    getSafeImageFileName(props.sourceFile?.name, mimeType, "cropped-image");
+    options.fileName
+    ?? props.outputFileName
+    ?? getSafeImageFileName(props.sourceFile?.name, mimeType, "cropped-image");
 
   const file = new File([blob], fileName, {
     type: mimeType,
@@ -266,12 +266,14 @@ async function confirm(): Promise<void> {
     if (result) {
       emit("confirm", result);
     }
-  } catch {
+  }
+  catch {
     emit("error", {
       code: "export-error",
       message: "Something went wrong while exporting the cropped image.",
     });
-  } finally {
+  }
+  finally {
     isExporting.value = false;
   }
 }

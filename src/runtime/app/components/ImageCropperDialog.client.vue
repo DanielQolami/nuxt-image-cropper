@@ -165,10 +165,14 @@ async function handleConfirm(): Promise<void> {
 <template>
   <UModal v-model:open="open" :dismissible="true">
     <template v-slot:title>
-      <slot name="title"> Crop image </slot>
+      <slot name="title">
+        Crop image
+      </slot>
     </template>
     <template v-slot:description>
-      <slot name="description"> Adjust the image before saving. </slot>
+      <slot name="description">
+        Adjust the image before saving.
+      </slot>
     </template>
 
     <template v-slot:body>

@@ -85,7 +85,9 @@ watch(selectedFile, (nextFile) => {
     :disabled="props.disabled"
   >
     <template v-slot:label>
-      <slot name="label"> Choose an image or drop it here </slot>
+      <slot name="label">
+        Choose an image or drop it here
+      </slot>
     </template>
     <template v-slot:description>
       <slot name="description">
