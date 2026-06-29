@@ -21,7 +21,7 @@ function handleAvatarCrop(result: ImageCropperResult) {
   <div>
     <div>Nuxt module playground!</div>
 
-    <div class="bg-rose-500 h-70">
+    <div class="h-70 flex flex-col gap-8 items-center justify-center">
       <ImageCropperPreview :src="avatarPreview" shape="circle" :size="112" />
 
       <UButton
@@ -38,7 +38,7 @@ function handleAvatarCrop(result: ImageCropperResult) {
         :output-quality="0.9"
         :output-width="512"
         :output-height="512"
-        :max-size="1 * 1024 * 1024"
+        :max-size="5 * 1024 * 1024"
         @confirm="handleAvatarCrop"
       />
     </div>
