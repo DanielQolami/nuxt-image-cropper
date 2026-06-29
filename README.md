@@ -1,81 +1,96 @@
-<!--
-Get your module up and running quickly.
+# Nuxt Image Cropper
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: Nuxt Image Cropper
-- Package name: nuxt-image-cropper
-- Description: This is a module that provides image cropper components based on 'vue-advanced-cropper' package
--->
+A Nuxt 4 module for client-side image cropping with `vue-advanced-cropper`, packaged as easy-to-use components and a composable.
 
-# My Module
+- Auto-registers components:
+  - `ImageCropper`
+  - `ImageCropperDialog`
+  - `ImageCropperDropzone`
+  - `ImageCropperPreview`
+- Exposes composable:
+  - `useImageCropperFile()`
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
-
-My new Nuxt module for doing amazing things.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-  <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
+![Screenshot](./src/docs/Screenshot_20260629_154917.png)
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
+- Client-side image cropping (components are client-only)
+- Component-based cropping UI (dialog, dropzone, preview)
+- Reusable file composable (`useImageCropperFile()`)
+- Structured crop output (File/Blob/DataURL + metadata)
 
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+## Installation
 
-## Quick Setup
+```bash
+pnpm add nuxt-image-cropper
+```
 
-Install the module to your Nuxt application with one command:
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ["nuxt-image-cropper"],
+});
+```
+
+or
 
 ```bash
 npx nuxt module add nuxt-image-cropper
+// or
+pnpm dlx nuxt module add nuxt-image-cropper
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+## Usage
 
-## Contribution
+See the usage reference in `src/docs/USAGE.md` (in this repo) for the minimal examples.
 
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
+---
 
-</details>
+### Crop output type
 
-<!-- Badges -->
+The crop result uses this shape:
 
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+```ts
+interface ImageCropperResult {
+  file: File | null;
+  blob: Blob | null;
+  dataUrl: string | null;
+  coordinates: ImageCropperCoordinates | null;
+  image: ImageCropperImageInfo | null;
+  width: number;
+  height: number;
+  mimeType: ImageCropperOutputMimeType;
+}
+```
+
+## Components
+
+### `ImageCropper`
+
+Use when you already have a source image/file and want the cropper surface.
+
+### `ImageCropperDialog`
+
+Use when you want a complete workflow in a dialog (upload/select → crop → confirm).
+
+### `ImageCropperDropzone`
+
+Use when you want an upload/drop area with validation.
+
+### `ImageCropperPreview`
+
+Use to show a preview of the cropped result.
+
+## Composable
+
+### `useImageCropperFile()`
+
+Shared file handling logic used by the cropper components.
+
+## License
+
+MIT
+
+## Contributing
+
+Pull requests welcome.
