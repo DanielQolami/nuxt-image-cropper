@@ -32,7 +32,7 @@ function validateImageFile(
     return {
       code: "invalid-file-type",
       message: `Unsupported image type. Please choose ${accept
-        .map((type) => type.replace("image/", "").toUpperCase())
+        .map(type => type.replace("image/", "").toUpperCase())
         .join(", ")}.`,
     };
   }
