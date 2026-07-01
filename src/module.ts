@@ -35,8 +35,14 @@ export default defineNuxtModule({
     const resolver = createResolver(import.meta.url);
 
     // We can inject our CSS file which includes Tailwind's directives
-    nuxt.options.css.push(resolver.resolve("./runtime/app/assets/main.css"));
-    nuxt.options.css.push("vue-advanced-cropper/dist/style.css");
+    const moduleCss = resolver.resolve("./runtime/app/assets/main.css");
+    const cropperCss = "vue-advanced-cropper/dist/style.css";
+
+    for (const css of [moduleCss, cropperCss]) {
+      if (!nuxt.options.css.includes(css)) {
+        nuxt.options.css.push(css);
+      }
+    }
 
     // export components
     addComponent({
