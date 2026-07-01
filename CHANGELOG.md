@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v1.0.4
+
+[compare changes](https://github.com/DanielQolami/nuxt-image-cropper/compare/v1.0.3...v1.0.4)
+
+### 💅 Refactors
+
+- Improve adding css files to nuxt assets ([b593fd9](https://github.com/DanielQolami/nuxt-image-cropper/commit/b593fd9))
+
+### 📖 Documentation
+
+- Add npm link to readme ([79a7b10](https://github.com/DanielQolami/nuxt-image-cropper/commit/79a7b10))
+
+### 🏡 Chore
+
+- Add MIT License to the project ([5c2090d](https://github.com/DanielQolami/nuxt-image-cropper/commit/5c2090d))
+
+### ❤️ Contributors
+
+- Daniel Qolami ([@DanielQolami](https://github.com/DanielQolami))
+
 ## v1.0.3
 
 [compare changes](https://github.com/DanielQolami/nuxt-image-cropper/compare/v1.0.2...v1.0.3)
