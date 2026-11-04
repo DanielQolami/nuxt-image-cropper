@@ -9,6 +9,9 @@ node_modules
 .tmp
 .cache
 
+# Local code graph (rebuild with node scripts/graphify.mjs build)
+graphify-out/
+
 # Yarn
 **/.yarn/cache
 **/.yarn/*state*

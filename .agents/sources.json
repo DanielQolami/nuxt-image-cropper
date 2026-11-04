@@ -1,0 +1,47 @@
+{
+  "skillsCliVersion": "1.7.6",
+  "sources": [
+    {
+      "repository": "https://github.com/addyosmani/agent-skills",
+      "revision": "301b02b12bff98e4688e6984af6556802322bbde",
+      "skills": [
+        "api-and-interface-design",
+        "browser-testing-with-devtools",
+        "code-review-and-quality",
+        "debugging-and-error-recovery",
+        "deprecation-and-migration",
+        "documentation-and-adrs",
+        "performance-optimization",
+        "security-and-hardening",
+        "source-driven-development",
+        "test-driven-development"
+      ],
+      "sharedReferences": ".agents/references"
+    },
+    {
+      "repository": "https://github.com/antfu/skills",
+      "revision": "7de210b51c8d48cc405a4eac3e17cbb1396c653b",
+      "skills": [
+        "nuxt"
+      ]
+    },
+    {
+      "repository": "https://github.com/onmax/nuxt-skills",
+      "revision": "2e74504f3151b18bf81e8a62cb7f1fa9edb532a4",
+      "skills": [
+        "nuxt-modules"
+      ]
+    },
+    {
+      "repository": "https://github.com/Graphify-Labs/graphify",
+      "revision": "59b5ab1151e031fb42e39cfc9a50bf96f2d57ae0",
+      "skills": [
+        "graphify"
+      ],
+      "skillFile": "graphify/skill-agents.md",
+      "references": "graphify/skills/agents/references",
+      "package": "graphifyy[mcp]==0.9.102",
+      "installation": "Vendored generic Agent Skills bundle; no hooks or global installation."
+    }
+  ]
+}

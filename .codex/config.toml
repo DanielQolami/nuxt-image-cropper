@@ -1,0 +1,12 @@
+# Project-local MCPs; matching names override user-level definitions.
+# Launch Codex from the repository root and trust this project to load this file.
+[mcp_servers.nuxt]
+url = "https://nuxt.com/mcp"
+
+[mcp_servers.nuxt-ui]
+url = "https://ui.nuxt.com/mcp"
+
+[mcp_servers.graphify]
+command = "node"
+args = ["./scripts/graphify.mjs", "mcp"]
+startup_timeout_sec = 120
