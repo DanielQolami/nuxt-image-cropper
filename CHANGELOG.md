@@ -13,7 +13,8 @@
 ### Maintenance
 
 - Update Nuxt, VueUse, module tooling, and development dependencies.
-- Run CI on Node.js 24 to match Nuxt's supported runtime versions.
+- Run CI on Node.js 26 to match Nuxt's supported runtime versions.
+- Install CI dependencies with pinned pnpm and the frozen lockfile instead of invoking npm through nypm.
 - Declare VueUse as a runtime dependency and update the package description.
 - Update consumer documentation and project agent tooling.
 

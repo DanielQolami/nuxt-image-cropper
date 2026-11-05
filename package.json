@@ -1,7 +1,7 @@
 {
   "name": "nuxt-image-cropper",
   "version": "1.1.0",
-  "description": "A Nuxt wrapper around vue-advanced-cropper with ready-to-use image cropping components.",
+  "description": "A Nuxt wrapper around \"vue-advanced-cropper\" with ready-to-use image cropping components.",
   "repository": "DanielQolami/nuxt-image-cropper",
   "license": "MIT",
   "type": "module",

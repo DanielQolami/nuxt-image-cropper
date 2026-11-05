@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  COREPACK_ENABLE_AUTO_PIN: "0"
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -17,12 +20,15 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
 
       - run: npm i -g --force corepack@latest && corepack enable
 
+      - name: Activate pnpm
+        run: corepack prepare pnpm@12.16.1 --activate
+
       - name: Install dependencies
-        run: npx nypm@latest i
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: npm run lint
@@ -35,12 +41,15 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
 
       - run: npm i -g --force corepack@latest && corepack enable
 
+      - name: Activate pnpm
+        run: corepack prepare pnpm@12.16.1 --activate
+
       - name: Install dependencies
-        run: npx nypm@latest i
+        run: pnpm install --frozen-lockfile
 
       - name: Playground prepare
         run: npm run dev:prepare
