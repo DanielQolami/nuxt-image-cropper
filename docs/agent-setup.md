@@ -1,6 +1,6 @@
 # Agent setup
 
-This repository supports Codex and Claude Code with 13 shared skills and three
+This repository supports Codex and Claude Code with 16 shared skills and three
 project MCP servers. `AGENTS.md` is authoritative; `CLAUDE.md` imports it.
 claude-mem, session-capture hooks, and Git hooks are not installed.
 
@@ -75,7 +75,10 @@ Canonical skills are committed under `.agents/skills/`, with relative symlinks i
 `.claude/skills/`. A fresh checkout needs no installation command to load them.
 Do not flatten or replace the symlinks with machine-specific absolute paths.
 
-`skills-lock.json` locks the 12 skills installed by skills CLI 1.7.6. Graphify uses
+`skills-lock.json` tracks 15 skills in the skills CLI 1.7.6 lock format. The original
+12 were installed with that CLI; `pnpm`, `vite`, and `create-adaptable-composable`
+were added with Codex's `skill-installer` and an explicit project destination.
+Graphify uses
 an upstream packaged skill named `skill-agents.md`, rather than a discoverable
 `SKILL.md`, so it is vendored separately and pinned in `.agents/sources.json`.
 That manifest also records all upstream revisions and the Addy reference location.
@@ -83,9 +86,16 @@ That manifest also records all upstream revisions and the Addy reference locatio
 | Source | Revision | Installed content |
 | --- | --- | --- |
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | `301b02b12bff98e4688e6984af6556802322bbde` | Selected 10 skills and shared root references. |
-| [antfu/skills](https://github.com/antfu/skills) | `7de210b51c8d48cc405a4eac3e17cbb1396c653b` | `nuxt`; Nuxt 5 examples require checking against this module's Nuxt 4. |
+| [antfu/skills](https://github.com/antfu/skills) | `7de210b51c8d48cc405a4eac3e17cbb1396c653b` | `nuxt`, `pnpm`, `vite`; Nuxt 5 examples require checking against this module's Nuxt 4. |
 | [onmax/nuxt-skills](https://github.com/onmax/nuxt-skills) | `2e74504f3151b18bf81e8a62cb7f1fa9edb532a4` | `nuxt-modules`. |
 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | `59b5ab1151e031fb42e39cfc9a50bf96f2d57ae0` | Generic agents skill and reference sidecars; runtime pinned to `0.9.102`. |
+| [vuejs-ai/skills](https://github.com/vuejs-ai/skills) | `198f0cd8f7f9c0a3d9b566ccc16de6677519ee78` | `create-adaptable-composable`. |
+
+The three additions cover reusable composables, dependency management, and Nuxt's
+Vite integration. `nuxt-modules` remains the module-authoring entry point.
+The app-oriented `nuxt4-patterns` skill is intentionally omitted from this project.
+`vue-nuxt` was used to review the project guide; it is not vendored here or required
+for a fresh checkout.
 
 License notices are retained under `.agents/licenses/`; upstream skill frontmatter
 and source attribution remain intact. Addy's shared `.agents/references/` must
@@ -99,6 +109,37 @@ For a deliberate update, inspect the upstream changes, resolve a full commit SHA
 then use a pinned URL and explicit clients/skills. Do not use blanket `--all`,
 global installation, or an unreviewed `skills update` across this repository.
 
+Codex's system skill installer can restore the three additions with the commands
+below. It requires Python 3 and network access, copies complete skill directories,
+and refuses existing destinations. For updates, install into a temporary staging
+directory first and review changes before replacing the intended skill directory.
+Run these commands from the repository root only when the destinations are absent:
+
+```bash
+# Restore the two tooling skills at the existing Antfu revision.
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
+  --repo antfu/skills --ref 7de210b51c8d48cc405a4eac3e17cbb1396c653b \
+  --path skills/pnpm skills/vite --dest .agents/skills
+
+# Restore the reusable composable skill at its reviewed revision.
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
+  --repo vuejs-ai/skills --ref 198f0cd8f7f9c0a3d9b566ccc16de6677519ee78 \
+  --path skills/create-adaptable-composable --dest .agents/skills
+```
+
+The helper does not create Claude links, copy repository-root licenses, or update
+project lock/provenance files. Maintain the relative link
+`../../.agents/skills/<name>` for each Claude entry, retain the Antfu license and
+the pinned Vue repository's `LICENSE` as `.agents/licenses/vuejs-ai-LICENSE`, and
+record the source, full revision, and upstream `skills/<name>/SKILL.md` path.
+For `computedHash`, use skills CLI 1.7.6's algorithm: recursively collect regular
+files excluding `.git` and `node_modules` directories, normalize relative paths
+to `/`, sort them with JavaScript `localeCompare`, then feed each path followed by
+its file bytes into SHA-256. Preserve existing lock entries and vendored content.
+
+The pinned skills CLI remains an alternative for deliberate restoration and
+maintenance across both clients:
+
 ```bash
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/addyosmani/agent-skills/tree/301b02b12bff98e4688e6984af6556802322bbde \
@@ -109,11 +150,16 @@ npm exec --yes --package skills@1.7.6 -- skills add \
 
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/antfu/skills/tree/7de210b51c8d48cc405a4eac3e17cbb1396c653b \
-  --skill nuxt --agent codex claude-code --yes
+  --skill nuxt pnpm vite --agent codex claude-code --yes
 
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/onmax/nuxt-skills/tree/2e74504f3151b18bf81e8a62cb7f1fa9edb532a4 \
   --skill nuxt-modules --agent codex claude-code --yes
+
+# Restore the selected Vue skill without installing the entire skill collection.
+npm exec --yes --package skills@1.7.6 -- skills add \
+  https://github.com/vuejs-ai/skills/tree/198f0cd8f7f9c0a3d9b566ccc16de6677519ee78 \
+  --skill create-adaptable-composable --agent codex claude-code --yes
 
 npm exec --yes --package skills@1.7.6 -- skills list --agent codex claude-code
 ```
@@ -130,7 +176,7 @@ revision in a temporary directory. Copy `graphify/skill-agents.md` to
 and keep the Claude link pointing to `../../.agents/skills/graphify`.
 Do not run platform instruction/hook installers over the curated root guides.
 
-After updates, verify both clients discover all 13 skills, resolve every local
+After updates, verify both clients discover all 16 skills, resolve every local
 support-file link, review lockfile/provenance changes, and rebuild the graph only
 if needed. A skills CLI `untracked` label for Graphify means it is maintained by
 the separate provenance manifest, not that it is absent from Git.

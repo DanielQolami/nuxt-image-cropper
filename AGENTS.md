@@ -18,6 +18,25 @@ Use the Nuxt MCP with version `4.x` and Nuxt UI MCP for version-matched document
 The installed Antfu `nuxt` skill describes Nuxt 5 prerelease behavior: do not apply
 Nuxt 5/Nitro 3 APIs, directory migrations, or dependency upgrades as incidental cleanup.
 
+## Project package profile
+
+Versions below were verified on 2026-11-05. Recheck installed packages and the
+lockfile before applying version-specific skill examples; these are observations,
+not new minimum consumer requirements.
+
+| Capability | Owner and observed version | Boundary |
+| --- | --- | --- |
+| Framework and registration | Nuxt / `@nuxt/kit` 4.6.4 | Kit registers packaged runtime files and consumer auto-imports. |
+| Module packaging | `@nuxt/module-builder` 1.0.3 | Owns package output and declaration generation. |
+| Consumer build integration | Vite 8.3.5 through Nuxt | Configure through Nuxt config or Kit hooks; retain module-builder for packaging. |
+| UI and styles | Vue 3.5.44, Nuxt UI 4.12.0, Tailwind CSS 4.3.4 | Reuse the existing components and class-merging helper. |
+| Image processing and URL lifecycle | `vue-advanced-cropper` 2.8.9, `@vueuse/nuxt` 15.0.0 | Browser-side cropping and VueUse object-URL cleanup. |
+| Package management | pnpm 12.16.1 in the inspected environment | Use the existing workspace settings and pnpm lockfile. |
+
+Only intentionally declared dependencies are application APIs; a transitive
+lockfile entry is not permission to add imports or dependencies. Additional
+packages from a skill's default stack require a task that calls for them.
+
 ## Public contracts and runtime
 
 - Preserve the `imageCropper` config key, compatibility metadata, and module dependencies.
@@ -53,6 +72,9 @@ Canonical project skills are in `.agents/skills/`; Claude Code uses relative lin
 under `.claude/skills/`. Read only skills and references relevant to the task:
 
 - Module registration, Kit, runtime packaging: `nuxt-modules`, then `nuxt` as needed.
+- Reusable composable inputs and reactivity: `create-adaptable-composable`.
+- Dependency resolution, workspace settings, and lockfiles: `pnpm`.
+- Nuxt build integration, Vite plugins, and bundler troubleshooting: `vite`.
 - Documentation/API research: `source-driven-development` and the Nuxt/Nuxt UI MCPs.
 - Consumer contracts: `api-and-interface-design`, `deprecation-and-migration`.
 - Behavior changes: `test-driven-development`, `debugging-and-error-recovery`.
@@ -60,6 +82,17 @@ under `.claude/skills/`. Read only skills and references relevant to the task:
 - Reviews: `code-review-and-quality`, `security-and-hardening`, `performance-optimization`.
 - Consumer docs and design rationale: `documentation-and-adrs`.
 - Architecture and dependency navigation: `graphify` and its MCP.
+
+Apply the new skills within the existing module boundaries:
+
+- Composable guidance does not authorize changing public signatures. Import Vue's
+  `MaybeRef` / `MaybeRefOrGetter` types instead of copying illustrative definitions;
+  preserve callback semantics, SSR guards, `shallowRef`, and URL lifecycle handling.
+- Use Vite guidance through Nuxt configuration or Kit hooks. Do not introduce a
+  standalone Vite config or replace module-builder merely to match an example.
+- Use pnpm guidance against the actual workspace and installed version. Do not
+  migrate package-manager settings, alter build approvals, read registry secrets,
+  or upgrade dependencies as incidental skill setup.
 
 For Graphify, use `node scripts/graphify.mjs` commands from `docs/agent-setup.md`.
 Use an existing graph to navigate; verify results in current source before edits.

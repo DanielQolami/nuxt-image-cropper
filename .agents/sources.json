@@ -22,8 +22,11 @@
       "repository": "https://github.com/antfu/skills",
       "revision": "7de210b51c8d48cc405a4eac3e17cbb1396c653b",
       "skills": [
-        "nuxt"
-      ]
+        "nuxt",
+        "pnpm",
+        "vite"
+      ],
+      "installation": "nuxt via skills CLI 1.7.6; pnpm and vite via Codex skill-installer with --dest .agents/skills."
     },
     {
       "repository": "https://github.com/onmax/nuxt-skills",
@@ -42,6 +45,15 @@
       "references": "graphify/skills/agents/references",
       "package": "graphifyy[mcp]==0.9.102",
       "installation": "Vendored generic Agent Skills bundle; no hooks or global installation."
+    },
+    {
+      "repository": "https://github.com/vuejs-ai/skills",
+      "revision": "198f0cd8f7f9c0a3d9b566ccc16de6677519ee78",
+      "skills": [
+        "create-adaptable-composable"
+      ],
+      "installation": "Codex skill-installer with --dest .agents/skills.",
+      "license": ".agents/licenses/vuejs-ai-LICENSE"
     }
   ]
 }

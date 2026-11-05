@@ -22,6 +22,13 @@
       "skillPath": "skills/code-review-and-quality/SKILL.md",
       "computedHash": "895b57b6fa13a75d182472c1428621cc59fca373723c07c2372ab4ac96307186"
     },
+    "create-adaptable-composable": {
+      "source": "vuejs-ai/skills",
+      "ref": "198f0cd8f7f9c0a3d9b566ccc16de6677519ee78",
+      "sourceType": "github",
+      "skillPath": "skills/create-adaptable-composable/SKILL.md",
+      "computedHash": "2f215126499d29a733be980ef9ce8f4ffb5f25a8831aec965d86c0cd21b2c5d2"
+    },
     "debugging-and-error-recovery": {
       "source": "addyosmani/agent-skills",
       "ref": "301b02b12bff98e4688e6984af6556802322bbde",
@@ -64,6 +71,13 @@
       "skillPath": "skills/performance-optimization/SKILL.md",
       "computedHash": "276aec00aaabae98f4bd6d565745378b498e0d11688315f32179587746b93805"
     },
+    "pnpm": {
+      "source": "antfu/skills",
+      "ref": "7de210b51c8d48cc405a4eac3e17cbb1396c653b",
+      "sourceType": "github",
+      "skillPath": "skills/pnpm/SKILL.md",
+      "computedHash": "d1bd6f4fd38ff1ba33b857223c58a832d1cd5b488163ba0d389db449be472603"
+    },
     "security-and-hardening": {
       "source": "addyosmani/agent-skills",
       "ref": "301b02b12bff98e4688e6984af6556802322bbde",
@@ -84,6 +98,13 @@
       "sourceType": "github",
       "skillPath": "skills/test-driven-development/SKILL.md",
       "computedHash": "3685f4d68f60c5fe97674a069bf589e6723e5196961fca68a26d40b319a4841d"
+    },
+    "vite": {
+      "source": "antfu/skills",
+      "ref": "7de210b51c8d48cc405a4eac3e17cbb1396c653b",
+      "sourceType": "github",
+      "skillPath": "skills/vite/SKILL.md",
+      "computedHash": "88ee465fd10f711efecc76e91e96accae2b229dda371614dcf219099c264a486"
     }
   }
 }
