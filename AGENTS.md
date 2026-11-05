@@ -3,8 +3,9 @@
 ## Project and sources of truth
 
 This is the published `nuxt-image-cropper` Nuxt 4 module, not a standalone app.
-It uses Nuxt Kit/module-builder, Vue 3, Nuxt UI 4, VueUse, Tailwind CSS 4, and
-`vue-advanced-cropper`. Check `package.json` and `pnpm-lock.yaml` for versions.
+It uses Nuxt Kit/module-builder, Vue 3, VueUse, ordinary CSS, local SVG components,
+and `vue-advanced-cropper`. Nuxt UI and Tailwind CSS are not required.
+Check `package.json` and `pnpm-lock.yaml` for versions.
 
 - `src/module.ts`: module metadata, dependencies, auto-imports, and CSS registration.
 - `src/runtime/app/`: consumer components, composables, types, utilities, and CSS.
@@ -14,7 +15,8 @@ It uses Nuxt Kit/module-builder, Vue 3, Nuxt UI 4, VueUse, Tailwind CSS 4, and
 
 User instructions and this guide take precedence over vendored skill defaults.
 Installed versions, local types/source, and repository configuration are authoritative.
-Use the Nuxt MCP with version `4.x` and Nuxt UI MCP for version-matched documentation.
+Use the Nuxt MCP with version `4.x`. The Nuxt UI MCP is available for optional
+consumer integrations and compatibility checks.
 The installed Antfu `nuxt` skill describes Nuxt 5 prerelease behavior: do not apply
 Nuxt 5/Nitro 3 APIs, directory migrations, or dependency upgrades as incidental cleanup.
 
@@ -29,7 +31,7 @@ not new minimum consumer requirements.
 | Framework and registration | Nuxt / `@nuxt/kit` 4.6.4 | Kit registers packaged runtime files and consumer auto-imports. |
 | Module packaging | `@nuxt/module-builder` 1.0.3 | Owns package output and declaration generation. |
 | Consumer build integration | Vite 8.3.5 through Nuxt | Configure through Nuxt config or Kit hooks; retain module-builder for packaging. |
-| UI and styles | Vue 3.5.44, Nuxt UI 4.12.0, Tailwind CSS 4.3.4 | Reuse the existing components and class-merging helper. |
+| UI and styles | Vue 3.5.44, ordinary CSS, local SVG components | Keep rose OKLCH defaults, isolated styles, native controls, and the `cn` helper. |
 | Image processing and URL lifecycle | `vue-advanced-cropper` 2.8.9, `@vueuse/nuxt` 15.0.0 | Browser-side cropping and VueUse object-URL cleanup. |
 | Package management | pnpm 12.16.1 in the inspected environment | Use the existing workspace settings and pnpm lockfile. |
 
@@ -50,6 +52,9 @@ packages from a skill's default stack require a task that calls for them.
 - Keep browser-only components named `.client.vue`; avoid accessing `window`,
   `document`, canvas, or browser constructors during server evaluation.
 - Keep CSS injection idempotent and resolve packaged runtime files with Nuxt Kit.
+- Use isolated `image-cropper-*` CSS and rose `--image-cropper-primary-*` defaults.
+  Internal SVG components live in `src/runtime/app/components/icons/`; import them
+  directly rather than exposing consumer auto-imports or adding an icon framework.
 - Preserve file validation, typed errors, export failures, and object-URL cleanup.
   Reuse VueUse's URL lifecycle handling rather than introducing leaking URLs.
 - Use composables for reusable state and `shallowRef` for opaque browser objects.
@@ -78,7 +83,8 @@ under `.claude/skills/`. Read only skills and references relevant to the task:
 - Documentation/API research: `source-driven-development` and the Nuxt/Nuxt UI MCPs.
 - Consumer contracts: `api-and-interface-design`, `deprecation-and-migration`.
 - Behavior changes: `test-driven-development`, `debugging-and-error-recovery`.
-- Browser interactions: `browser-testing-with-devtools` when a browser tool is available.
+- Browser interactions: `browser-testing-with-devtools` when a browser tool is available;
+  browser regressions use Playwright Core with isolated Chromium.
 - Reviews: `code-review-and-quality`, `security-and-hardening`, `performance-optimization`.
 - Consumer docs and design rationale: `documentation-and-adrs`.
 - Architecture and dependency navigation: `graphify` and its MCP.
@@ -115,8 +121,9 @@ Use pnpm; do not create another package-manager lockfile.
 | Registration, CSS, consumer integration | Also `pnpm dev:build`. |
 | Module packaging or exports | Also `pnpm prepack`; inspect the generated package. |
 
-The current Vitest test checks only that the SSR fixture renders `<div>basic</div>`.
-Passing it does not verify cropping, canvas export, validation, or browser interactions.
+The basic SSR test checks `<div>basic</div>`. Browser regressions in
+`test/browser.test.ts` exercise the native UI, validation, crop export, and cleanup.
+Install the test browser with `pnpm exec playwright-core install chromium` when absent.
 For affected UI behavior, check select/drop, crop/confirm, dimensions/MIME, invalid
 files, cancel/reopen, and URL cleanup in the playground; add meaningful regression
 coverage where appropriate. Report checks actually run and pre-existing failures.

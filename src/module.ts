@@ -20,21 +20,14 @@ export default defineNuxtModule({
   // Default configuration options of the Nuxt module
   defaults: {},
   moduleDependencies: {
-    "@nuxt/ui": {
-      version: ">=4.9.0",
-    },
     "@vueuse/nuxt": {
       version: ">=14.3.0",
     },
-    // prettier-ignore
-    /* "tailwindcss": {
-      version: ">=4.0.0",
-    }, */
   },
   setup(_options, nuxt) {
     const resolver = createResolver(import.meta.url);
 
-    // We can inject our CSS file which includes Tailwind's directives
+    // Ship ordinary CSS without requiring a consumer styling framework.
     const moduleCss = resolver.resolve("./runtime/app/assets/main.css");
     const cropperCss = "vue-advanced-cropper/dist/style.css";
 

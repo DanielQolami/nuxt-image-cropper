@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from "vue";
 import { cn } from "../utils/cn.utils";
+import UserIcon from "./icons/UserIcon.vue";
 
 interface ImageCropperPreviewProps {
   src: string | null;
@@ -17,15 +18,15 @@ const props = withDefaults(defineProps<ImageCropperPreviewProps>(), {
 });
 
 const previewShapeClass = computed(() => {
-  if (props.shape === "circle") return "rounded-full";
-  if (props.shape === "rounded") return "rounded-2xl";
+  if (props.shape === "circle") return "image-cropper-preview--circle";
+  if (props.shape === "rounded") return "image-cropper-preview--rounded";
 
-  return "rounded-none";
+  return "image-cropper-preview--square";
 });
 
 const rootClass = computed(() =>
   cn(
-    "grid place-items-center overflow-hidden border bg-muted",
+    "image-cropper-theme image-cropper-preview",
     previewShapeClass.value,
     props.class,
   ),
@@ -44,9 +45,9 @@ const rootClass = computed(() =>
       v-if="props.src"
       :src="props.src"
       :alt="props.alt"
-      class="size-full object-cover"
+      class="image-cropper-preview__image"
     >
 
-    <UIcon v-else name="i-lucide-user" class="text-2xl text-muted" />
+    <UserIcon v-else class="image-cropper-preview__placeholder" />
   </div>
 </template>

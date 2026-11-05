@@ -45,5 +45,9 @@ jobs:
       - name: Playground prepare
         run: npm run dev:prepare
 
+      # Browser regressions need Chromium and its Linux libraries on fresh runners.
+      - name: Install test browser
+        run: pnpm exec playwright-core install --with-deps chromium
+
       - name: Test
         run: npm run test

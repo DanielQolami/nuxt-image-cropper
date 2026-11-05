@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, shallowRef, watch } from "vue";
+import { type HTMLAttributes, computed, useId, useTemplateRef } from "vue";
+import { useDropZone } from "#imports";
 import type {
   ImageCropperError,
   ImageCropperMimeType,
@@ -7,9 +8,11 @@ import type {
 import {
   DEFAULT_IMAGE_CROPPER_ACCEPT,
   DEFAULT_IMAGE_CROPPER_MAX_SIZE,
+  formatBytes,
   validateImageFile,
 } from "../utils/image-validation.utils";
 import { cn } from "../utils/cn.utils";
+import ImagePlusIcon from "./icons/ImagePlusIcon.vue";
 
 interface ImageCropperDropzoneProps {
   accept?: readonly ImageCropperMimeType[];
@@ -36,63 +39,78 @@ const props = withDefaults(defineProps<ImageCropperDropzoneProps>(), {
 const emit = defineEmits<ImageCropperDropzoneEmits>();
 defineSlots<ImageCropperDropzoneSlots>();
 
-const selectedFile = shallowRef<File | null>(null);
+// Stable IDs associate the native input with the consumer's slotted text.
+const inputId = useId();
+const dropzoneEl = useTemplateRef<HTMLLabelElement>("dropzone-ref");
 const acceptAttribute = computed(() => props.accept.join(","));
-
-const rootClass = computed(() => {
-  return cn("w-full", props.class);
+const description = computed(() => {
+  const formats = props.accept.map(type => type.replace("image/", "").toUpperCase());
+  return `${formats.join(", ")}. Max ${formatBytes(props.maxSize)}.`;
 });
 
-let clearing = false;
+/** Both entry paths share validation so invalid drops emit the same typed errors. */
+function selectFile(file: File | undefined): void {
+  if (props.disabled || !file) return;
 
-watch(selectedFile, (nextFile) => {
-  if (clearing) return;
-  if (!nextFile) return;
-
-  console.log("selectd file: ", selectedFile.value);
-  const error = validateImageFile(nextFile, {
+  const error = validateImageFile(file, {
     accept: props.accept,
     maxSize: props.maxSize,
   });
 
-  console.info("error: ", error?.message);
-
   if (error) {
     emit("error", error);
-    clearing = true;
-    selectedFile.value = null;
-    clearing = false;
     return;
   }
 
-  if (nextFile) {
-    emit("select", nextFile);
-  }
+  emit("select", file);
+}
+
+// Validate File objects ourselves instead of silently filtering dropped MIME types.
+const { isOverDropZone } = useDropZone(dropzoneEl, {
+  checkValidity: () => !props.disabled,
+  preventDefaultForUnhandled: true,
+  onDrop: (files: File[] | null) => selectFile(files?.[0]),
 });
+
+const rootClass = computed(() => cn(
+  "image-cropper-theme image-cropper-dropzone",
+  { "image-cropper-dropzone--over": isOverDropZone.value && !props.disabled },
+  props.class,
+));
+
+function handleChange(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  // Reset before emitting, because the parent may unmount this input after selection.
+  input.value = "";
+  selectFile(file);
+}
 </script>
 
 <template>
-  <UFileUpload
-    v-model="selectedFile"
+  <label
+    ref="dropzone-ref"
+    :for="inputId"
     :class="rootClass"
-    variant="area"
-    layout="grid"
-    size="xl"
-    icon="i-lucide-image-plus"
-    :accept="acceptAttribute"
-    :dropzone="true"
-    :interactive="true"
-    :disabled="props.disabled"
+    :aria-disabled="props.disabled"
   >
-    <template v-slot:label>
-      <slot name="label">
-        Choose an image or drop it here
-      </slot>
-    </template>
-    <template v-slot:description>
-      <slot name="description">
-        JPEG, PNG, WebP, HEIC, or HEIF. Max 5 MB.
-      </slot>
-    </template>
-  </UFileUpload>
+    <!-- A real file input provides keyboard and mobile access alongside drag and drop. -->
+    <input
+      :id="inputId"
+      class="image-cropper-visually-hidden"
+      type="file"
+      :accept="acceptAttribute"
+      :disabled="props.disabled"
+      :aria-labelledby="`${inputId}-label`"
+      :aria-describedby="`${inputId}-description`"
+      @change="handleChange"
+    >
+    <ImagePlusIcon class="image-cropper-dropzone__icon" />
+    <span :id="`${inputId}-label`" class="image-cropper-dropzone__label">
+      <slot name="label">Choose an image or drop it here</slot>
+    </span>
+    <span :id="`${inputId}-description`" class="image-cropper-dropzone__description">
+      <slot name="description">{{ description }}</slot>
+    </span>
+  </label>
 </template>

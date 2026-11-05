@@ -17,7 +17,9 @@ A Nuxt 4 module for client-side image cropping with `vue-advanced-cropper`, pack
 ## Features
 
 - Client-side image cropping (components are client-only)
-- Component-based cropping UI (dialog, dropzone, preview)
+- Component-based cropping UI (native dialog, dropzone, preview)
+- isolated CSS with rose OKLCH colors
+- Editable SVG components and existing slots for custom controls
 - Reusable file composable (`useImageCropperFile()`)
 - Structured crop output (File/Blob/DataURL + metadata)
 
@@ -44,7 +46,9 @@ pnpm dlx nuxt module add nuxt-image-cropper
 
 ## Usage
 
-See the usage reference in `src/docs/USAGE.md` (in this repo) for the minimal examples.
+See [usage and customization](./src/docs/USAGE.md) for examples, CSS variables, slots, and migration from Nuxt UI styling.
+
+Requires Nuxt 4.4+ and Vue 3.5+. The dialog uses native `showModal()` in modern browsers; animations are optional and respect reduced motion.
 
 ---
 

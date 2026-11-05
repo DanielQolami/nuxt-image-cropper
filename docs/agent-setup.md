@@ -24,7 +24,7 @@ Claude's Graphify entry supports `CLAUDE_PROJECT_DIR` with a root-directory fall
 | MCP | Purpose |
 | --- | --- |
 | `nuxt` — `https://nuxt.com/mcp` | Official documentation; request Nuxt `4.x`. |
-| `nuxt-ui` — `https://ui.nuxt.com/mcp` | Components used by the cropper UI. |
+| `nuxt-ui` — `https://ui.nuxt.com/mcp` | Optional consumer integrations and compatibility checks. |
 | `graphify` — local stdio | Query this checkout's code graph. |
 
 The Addy browser skill can use a browser MCP already provided by your client.

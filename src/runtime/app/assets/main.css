@@ -1,16 +1,293 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+/* Defaults belong to module roots, never to the host's :root, buttons, or headings. */
+.image-cropper-theme {
+  --image-cropper-primary-50: oklch(96.9% 0.015 12.422);
+  --image-cropper-primary-100: oklch(94.1% 0.03 12.58);
+  --image-cropper-primary-200: oklch(89.2% 0.058 10.001);
+  --image-cropper-primary-300: oklch(81% 0.117 11.638);
+  --image-cropper-primary-400: oklch(71.2% 0.194 13.428);
+  --image-cropper-primary-500: oklch(64.5% 0.246 16.439);
+  --image-cropper-primary-600: oklch(58.6% 0.253 17.585);
+  --image-cropper-primary-700: oklch(51.4% 0.222 16.935);
+  --image-cropper-primary-800: oklch(45.5% 0.188 13.697);
+  --image-cropper-primary-900: oklch(41% 0.159 10.272);
+  --image-cropper-primary-950: oklch(27.1% 0.105 12.094);
+  --image-cropper-surface: #fff;
+  --image-cropper-muted-surface: #f4f4f5;
+  --image-cropper-text: #18181b;
+  --image-cropper-muted-text: #52525b;
+  --image-cropper-border: #d4d4d8;
+  --image-cropper-error: #b91c1c;
+  --image-cropper-error-surface: #fef2f2;
+  color-scheme: light;
+  color: var(--image-cropper-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
 
-@theme static {
-  --ui-color-primary-50: var(--color-rose-50, oklch(96.9% 0.015 12.422));
-  --ui-color-primary-100: var(--color-rose-100, oklch(94.1% 0.03 12.58));
-  --ui-color-primary-200: var(--color-rose-200, oklch(89.2% 0.058 10.001));
-  --ui-color-primary-300: var(--color-rose-300, oklch(81% 0.117 11.638));
-  --ui-color-primary-400: var(--color-rose-400, oklch(71.2% 0.194 13.428));
-  --ui-color-primary-500: var(--color-rose-500, oklch(64.5% 0.246 16.439));
-  --ui-color-primary-600: var(--color-rose-600, oklch(58.6% 0.253 17.585));
-  --ui-color-primary-700: var(--color-rose-700, oklch(51.4% 0.222 16.935));
-  --ui-color-primary-800: var(--color-rose-800, oklch(45.5% 0.188 13.697));
-  --ui-color-primary-900: var(--color-rose-900, oklch(41% 0.159 10.272));
-  --ui-color-primary-950: var(--color-rose-950, oklch(27.1% 0.105 12.094));
+/* Respect explicit host color modes; otherwise follow the operating system. */
+@media (prefers-color-scheme: dark) {
+  .image-cropper-theme:not(:where(.light, .light *)) {
+    --image-cropper-surface: #18181b;
+    --image-cropper-muted-surface: #27272a;
+    --image-cropper-text: #fafafa;
+    --image-cropper-muted-text: #a1a1aa;
+    --image-cropper-border: #52525b;
+    --image-cropper-error: #fca5a5;
+    --image-cropper-error-surface: #450a0a;
+    color-scheme: dark;
+  }
+}
+
+:where(.dark, .dark *) .image-cropper-theme,
+.image-cropper-theme.dark {
+  --image-cropper-surface: #18181b;
+  --image-cropper-muted-surface: #27272a;
+  --image-cropper-text: #fafafa;
+  --image-cropper-muted-text: #a1a1aa;
+  --image-cropper-border: #52525b;
+  --image-cropper-error: #fca5a5;
+  --image-cropper-error-surface: #450a0a;
+  color-scheme: dark;
+}
+
+/* Scope normalization to our own component trees, including the cropper engine. */
+.image-cropper-theme,
+.image-cropper-theme :where(*) {
+  box-sizing: border-box;
+}
+
+.image-cropper {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+}
+
+.image-cropper__stage {
+  position: relative;
+  width: 100%;
+  min-height: min(22.5rem, 60vh);
+  overflow: hidden;
+  border-radius: 1rem;
+  background:
+    linear-gradient(45deg, #7f7f7f14 25%, transparent 25%),
+    linear-gradient(-45deg, #7f7f7f14 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #7f7f7f14 75%),
+    linear-gradient(-45deg, transparent 75%, #7f7f7f14 75%);
+  background-position: 0 0, 0 0.5rem, 0.5rem -0.5rem, -0.5rem 0;
+  background-size: 1rem 1rem;
+}
+
+.image-cropper__canvas {
+  height: min(70vh, 32.5rem);
+  width: 100%;
+}
+
+.image-cropper__empty {
+  display: grid;
+  min-height: 15rem;
+  place-items: center;
+  border: 1px dashed var(--image-cropper-border);
+  border-radius: 1rem;
+  color: var(--image-cropper-muted-text);
+}
+
+.image-cropper__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Native buttons retain distinct disabled, busy, hover, and keyboard-focus states. */
+.image-cropper-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--image-cropper-border);
+  border-radius: 0.5rem;
+  background: var(--image-cropper-muted-surface);
+  color: var(--image-cropper-text);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.image-cropper-button svg {
+  flex: none;
+  width: 1.125em;
+  height: 1.125em;
+}
+
+.image-cropper-button:hover:not(:disabled) {
+  border-color: var(--image-cropper-primary-500);
+}
+
+.image-cropper-button--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.image-cropper-button--ghost:hover:not(:disabled) {
+  background: var(--image-cropper-muted-surface);
+}
+
+.image-cropper-button--primary {
+  border-color: var(--image-cropper-primary-600);
+  background: var(--image-cropper-primary-600);
+  color: #fff;
+}
+
+.image-cropper-button--primary:hover:not(:disabled) {
+  border-color: var(--image-cropper-primary-700);
+  background: var(--image-cropper-primary-700);
+}
+
+.image-cropper-button:focus-visible,
+.image-cropper-dropzone:focus-within {
+  outline: 2px solid var(--image-cropper-primary-500);
+  outline-offset: 3px;
+}
+
+.image-cropper-button:disabled,
+.image-cropper-dropzone[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.image-cropper-spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: image-cropper-spin 700ms linear infinite;
+}
+
+@keyframes image-cropper-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Keep the file input in the tab order while presenting a larger clickable label. */
+.image-cropper-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.image-cropper-dropzone {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 12rem;
+  padding: 2rem 1.25rem;
+  place-content: center;
+  justify-items: center;
+  gap: 0.5rem;
+  border: 2px dashed var(--image-cropper-border);
+  border-radius: 0.75rem;
+  background: var(--image-cropper-muted-surface);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 150ms, background-color 150ms;
+}
+
+.image-cropper-dropzone:hover:not([aria-disabled="true"]),
+.image-cropper-dropzone--over {
+  border-color: var(--image-cropper-primary-500);
+  background: color-mix(in oklch, var(--image-cropper-primary-500) 10%, var(--image-cropper-surface));
+}
+
+.image-cropper-dropzone__icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--image-cropper-primary-500);
+}
+
+.image-cropper-dropzone__label { font-weight: 600; }
+.image-cropper-dropzone__description { color: var(--image-cropper-muted-text); }
+
+.image-cropper-preview {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--image-cropper-border);
+  background: var(--image-cropper-muted-surface);
+}
+
+.image-cropper-preview--circle { border-radius: 50%; }
+.image-cropper-preview--rounded { border-radius: 1rem; }
+.image-cropper-preview--square { border-radius: 0; }
+.image-cropper-preview__image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.image-cropper-preview__placeholder { width: 1.5rem; height: 1.5rem; color: var(--image-cropper-muted-text); }
+
+/* Native modality provides the top layer and inert background without a portal dependency. */
+.image-cropper-dialog {
+  width: min(42rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--image-cropper-border);
+  border-radius: 1rem;
+  background: var(--image-cropper-surface);
+  box-shadow: 0 1.5rem 4rem #0003;
+}
+
+.image-cropper-dialog::backdrop { background: #0009; }
+
+.image-cropper-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--image-cropper-border);
+}
+
+.image-cropper-dialog__title { margin: 0; color: var(--image-cropper-text); font-size: 1.125rem; font-weight: 600; }
+.image-cropper-dialog__description { margin: 0.375rem 0 0; color: var(--image-cropper-muted-text); }
+.image-cropper-dialog__body { display: grid; gap: 1rem; padding: 1.25rem; }
+.image-cropper-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; padding: 1.25rem; border-top: 1px solid var(--image-cropper-border); }
+.image-cropper-alert { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.75rem; border-radius: 0.5rem; color: var(--image-cropper-error); background: var(--image-cropper-error-surface); }
+.image-cropper-alert svg { flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; }
+
+/* Unsupported discrete transitions leave the fully functional dialog opening instantly. */
+@supports (transition-behavior: allow-discrete) and (overlay: auto) {
+  .image-cropper-dialog {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+    transition: opacity 160ms, transform 160ms, display 160ms allow-discrete, overlay 160ms allow-discrete;
+  }
+
+  .image-cropper-dialog[open] { opacity: 1; transform: none; }
+  .image-cropper-dialog::backdrop { opacity: 0; transition: opacity 160ms, display 160ms allow-discrete, overlay 160ms allow-discrete; }
+  .image-cropper-dialog[open]::backdrop { opacity: 1; }
+
+  @starting-style {
+    .image-cropper-dialog[open] { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+    .image-cropper-dialog[open]::backdrop { opacity: 0; }
+  }
+}
+
+/* Reduce both movement and delayed visibility for people requesting reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .image-cropper-button,
+  .image-cropper-dropzone,
+  .image-cropper-dialog,
+  .image-cropper-dialog::backdrop { transition: none; }
+  .image-cropper-spinner { animation: none; }
 }

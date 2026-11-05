@@ -26,6 +26,11 @@ import {
 } from "../utils/canvas.utils";
 import { getSafeImageFileName } from "../utils/image-validation.utils";
 import { cn } from "../utils/cn.utils";
+import ZoomOutIcon from "./icons/ZoomOutIcon.vue";
+import ZoomInIcon from "./icons/ZoomInIcon.vue";
+import RotateLeftIcon from "./icons/RotateLeftIcon.vue";
+import RotateRightIcon from "./icons/RotateRightIcon.vue";
+import ResetIcon from "./icons/ResetIcon.vue";
 
 type CropperInstance = InstanceType<typeof Cropper> & {
   getResult: () => {
@@ -278,8 +283,9 @@ async function confirm(): Promise<void> {
   }
 }
 
+// Keep consumer classes while owning the component's framework-independent layout.
 const rootClass = computed(() => {
-  return cn("grid w-full gap-4", props.class);
+  return cn("image-cropper-theme image-cropper", props.class);
 });
 
 useResizeObserver(stageEl, () => {
@@ -309,16 +315,11 @@ defineExpose({
 
 <template>
   <div :class="rootClass">
-    <div
-      ref="stage-ref"
-      :class="[
-        $style['image-cropper__stage'],
-        'relative min-h-90 w-full overflow-hidden rounded-2xl',
-      ]"
-    >
+    <!-- The cropper engine continues to own all image gestures and canvas work. -->
+    <div ref="stage-ref" class="image-cropper__stage">
       <Cropper
         ref="cropper-ref"
-        class="h-[min(70vh,32.5rem)] w-full"
+        class="image-cropper__canvas"
         :src="props.src"
         :default-size="defaultSize"
         :stencil-props="stencilProps"
@@ -335,155 +336,125 @@ defineExpose({
     </div>
 
     <slot v-if="!hasImage" name="empty">
-      <div
-        class="grid min-h-60 place-items-center rounded-2xl border border-dashed text-sm text-muted"
-      >
+      <div class="image-cropper__empty">
         No image selected.
       </div>
     </slot>
 
-    <div
-      v-if="props.showControls"
-      class="flex flex-wrap items-center justify-between gap-3"
-    >
-      <div class="flex flex-wrap gap-2">
-        <!-- zoom out -->
-        <slot
-          v-if="resolvedControls.zoomOut"
-          name="zoomOut"
+    <!-- Existing slots still allow consumers to supply their own controls. -->
+    <div v-if="props.showControls" class="image-cropper__controls">
+      <slot
+        v-if="resolvedControls.zoomOut"
+        name="zoomOut"
+        :disabled="disabledWithNoImage"
+        :zoom-out="zoomOut"
+      >
+        <button
+          type="button"
+          class="image-cropper-button"
+          aria-label="Zoom out"
           :disabled="disabledWithNoImage"
-          :zoom-out="zoomOut"
+          @click="zoomOut"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="soft"
-            icon="i-lucide-zoom-out"
-            :disabled="disabledWithNoImage"
-            @click="zoomOut"
-          />
-        </slot>
-
-        <!-- zoom in -->
-        <slot
-          v-if="resolvedControls.zoomIn"
-          name="zoomIn"
+          <ZoomOutIcon />
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.zoomIn"
+        name="zoomIn"
+        :disabled="disabledWithNoImage"
+        :zoom-in="zoomIn"
+      >
+        <button
+          type="button"
+          class="image-cropper-button"
+          aria-label="Zoom in"
           :disabled="disabledWithNoImage"
-          :zoom-in="zoomIn"
+          @click="zoomIn"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="soft"
-            icon="i-lucide-zoom-in"
-            :disabled="disabledWithNoImage"
-            @click="zoomIn"
-          />
-        </slot>
-
-        <!-- rotate left -->
-        <slot
-          v-if="resolvedControls.rotateLeft"
-          name="rotateLeft"
+          <ZoomInIcon />
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.rotateLeft"
+        name="rotateLeft"
+        :disabled="disabledWithNoImage"
+        :rotate-left="rotateLeft"
+      >
+        <button
+          type="button"
+          class="image-cropper-button"
+          aria-label="Rotate left"
           :disabled="disabledWithNoImage"
-          :rotate-left="rotateLeft"
+          @click="rotateLeft"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="soft"
-            icon="i-lucide-rotate-ccw"
-            :disabled="disabledWithNoImage"
-            @click="rotateLeft"
-          />
-        </slot>
-
-        <!-- rotate right -->
-        <slot
-          v-if="resolvedControls.rotateRight"
-          name="rotateRight"
+          <RotateLeftIcon />
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.rotateRight"
+        name="rotateRight"
+        :disabled="disabledWithNoImage"
+        :rotate-right="rotateRight"
+      >
+        <button
+          type="button"
+          class="image-cropper-button"
+          aria-label="Rotate right"
           :disabled="disabledWithNoImage"
-          :rotate-right="rotateRight"
+          @click="rotateRight"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="soft"
-            icon="i-lucide-rotate-cw"
-            :disabled="disabledWithNoImage"
-            @click="rotateRight"
-          />
-        </slot>
-
-        <!-- reset -->
-        <slot
-          v-if="resolvedControls.reset"
-          name="reset"
+          <RotateRightIcon />
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.reset"
+        name="reset"
+        :disabled="disabledWithNoImage"
+        :reset="reset"
+      >
+        <button
+          type="button"
+          class="image-cropper-button"
           :disabled="disabledWithNoImage"
-          :reset="reset"
+          @click="reset"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="soft"
-            icon="i-lucide-refresh-cw"
-            :label="labels.reset"
-            :disabled="disabledWithNoImage"
-            @click="reset"
-          />
-        </slot>
-
-        <!-- cancel -->
-        <slot
-          v-if="resolvedControls.cancel"
-          name="cancel"
+          <ResetIcon />{{ labels.reset }}
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.cancel"
+        name="cancel"
+        :disabled="props.disabled || isExporting"
+        :cancel="cancel"
+      >
+        <button
+          type="button"
+          class="image-cropper-button image-cropper-button--ghost"
           :disabled="props.disabled || isExporting"
-          :cancel="cancel"
+          @click="cancel"
         >
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            :label="labels.cancel"
-            :disabled="props.disabled || isExporting"
-            @click="cancel"
-          />
-        </slot>
-
-        <!-- confirm -->
-        <slot
-          v-if="resolvedControls.confirm"
-          name="confirm"
-          :disabled="disabledWithNoImage"
-          :loading="isExporting"
-          :confirm="confirm"
+          {{ labels.cancel }}
+        </button>
+      </slot>
+      <slot
+        v-if="resolvedControls.confirm"
+        name="confirm"
+        :disabled="disabledWithNoImage"
+        :loading="isExporting"
+        :confirm="confirm"
+      >
+        <button
+          type="button"
+          class="image-cropper-button image-cropper-button--primary"
+          :aria-busy="isExporting"
+          :disabled="disabledWithNoImage || isExporting"
+          @click="confirm"
         >
-          <UButton
-            size="sm"
-            color="primary"
-            :label="labels.confirm"
-            :loading="isExporting"
-            :disabled="disabledWithNoImage"
-            @click="confirm"
-          />
-        </slot>
-      </div>
+          <span v-if="isExporting" class="image-cropper-spinner" aria-hidden="true" />
+          {{ labels.confirm }}
+        </button>
+      </slot>
     </div>
   </div>
 </template>
-
-<style lang="css" module>
-.image-cropper__stage {
-  background:
-    linear-gradient(45deg, rgba(127, 127, 127, 0.08) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(127, 127, 127, 0.08) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgba(127, 127, 127, 0.08) 75%),
-    linear-gradient(-45deg, transparent 75%, rgba(127, 127, 127, 0.08) 75%);
-  background-position:
-    0 0,
-    0 0.5rem,
-    0.5rem -0.5rem,
-    -0.5rem 0;
-  background-size: 1rem 1rem;
-}
-</style>
