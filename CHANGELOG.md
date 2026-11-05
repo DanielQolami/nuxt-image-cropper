@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v1.1.0
+
+[compare changes](https://github.com/DanielQolami/nuxt-image-cropper/compare/v1.0.4...v1.1.0)
+
+### Features
+
+- Replace Nuxt UI and Tailwind CSS with native HTML controls, isolated CSS, and local SVG icons.
+- Use a native crop dialog with keyboard dismissal, focus restoration, and coordinated scroll locking.
+
+### Maintenance
+
+- Update Nuxt, VueUse, module tooling, and development dependencies.
+- Run CI on Node.js 24 to match Nuxt's supported runtime versions.
+- Declare VueUse as a runtime dependency and update the package description.
+- Update consumer documentation and project agent tooling.
+
+### Tests
+
+- Add browser regression coverage for native controls, file validation, crop exports, dialog behavior, and cleanup.
+
 ## v1.0.4
 
 [compare changes](https://github.com/DanielQolami/nuxt-image-cropper/compare/v1.0.3...v1.0.4)
