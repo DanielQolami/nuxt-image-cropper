@@ -15,10 +15,9 @@ Check `package.json` and `pnpm-lock.yaml` for versions.
 
 User instructions and this guide take precedence over vendored skill defaults.
 Installed versions, local types/source, and repository configuration are authoritative.
-Use the Nuxt MCP with version `4.x`. The Nuxt UI MCP is available for optional
-consumer integrations and compatibility checks.
-The installed Antfu `nuxt` skill describes Nuxt 5 prerelease behavior: do not apply
-Nuxt 5/Nitro 3 APIs, directory migrations, or dependency upgrades as incidental cleanup.
+Use `nuxt-modules` and the Nuxt MCP with version `4.x` for framework guidance.
+Do not apply Nuxt 5/Nitro 3 APIs, directory migrations, or dependency upgrades as
+incidental cleanup.
 
 ## Project package profile
 
@@ -76,15 +75,15 @@ Follow `.editorconfig` and `eslint.config.mjs`, including when a skill differs:
 Canonical project skills are in `.agents/skills/`; Claude Code uses relative links
 under `.claude/skills/`. Read only skills and references relevant to the task:
 
-- Module registration, Kit, runtime packaging: `nuxt-modules`, then `nuxt` as needed.
+- Module registration, Kit, runtime packaging: `nuxt-modules` and the Nuxt 4 MCP.
 - Reusable composable inputs and reactivity: `create-adaptable-composable`.
 - Dependency resolution, workspace settings, and lockfiles: `pnpm`.
 - Nuxt build integration, Vite plugins, and bundler troubleshooting: `vite`.
-- Documentation/API research: `source-driven-development` and the Nuxt/Nuxt UI MCPs.
+- Documentation/API research: `source-driven-development` and the Nuxt 4 MCP.
 - Consumer contracts: `api-and-interface-design`, `deprecation-and-migration`.
 - Behavior changes: `test-driven-development`, `debugging-and-error-recovery`.
-- Browser interactions: `browser-testing-with-devtools` when a browser tool is available;
-  browser regressions use Playwright Core with isolated Chromium.
+- Browser interactions: the existing Playwright Core tests with isolated Chromium
+  in `test/browser.test.ts`; no browser MCP is required.
 - Reviews: `code-review-and-quality`, `security-and-hardening`, `performance-optimization`.
 - Consumer docs and design rationale: `documentation-and-adrs`.
 - Architecture and dependency navigation: `graphify` and its MCP.

@@ -1,6 +1,6 @@
 # Agent setup
 
-This repository supports Codex and Claude Code with 16 shared skills and three
+This repository supports Codex and Claude Code with 14 shared skills and two
 project MCP servers. `AGENTS.md` is authoritative; `CLAUDE.md` imports it.
 claude-mem, session-capture hooks, and Git hooks are not installed.
 
@@ -14,21 +14,22 @@ claude-mem, session-capture hooks, and Git hooks are not installed.
   `files.pythonhosted.org`. The latter hosts Python wheels, not just metadata.
 - Launch `codex` or `claude` from the repository root. Trust the repository to load
   Codex's project configuration; review Claude's project MCP prompt normally.
-  Restart an existing agent session to discover newly installed skills and MCPs.
+  Restart existing Codex and Claude Code sessions to reload skill and MCP changes.
 
 Check `codex mcp list` and Claude's `/mcp` after restarting. Codex configuration is
-in `.codex/config.toml`; Claude configuration is in `.mcp.json`. Matching `nuxt`
-and `nuxt-ui` names override user definitions without editing global settings.
+in `.codex/config.toml`; Claude configuration is in `.mcp.json`. Matching project
+MCP names override user definitions without editing global settings.
 Claude's Graphify entry supports `CLAUDE_PROJECT_DIR` with a root-directory fallback.
 
 | MCP | Purpose |
 | --- | --- |
 | `nuxt` — `https://nuxt.com/mcp` | Official documentation; request Nuxt `4.x`. |
-| `nuxt-ui` — `https://ui.nuxt.com/mcp` | Optional consumer integrations and compatibility checks. |
 | `graphify` — local stdio | Query this checkout's code graph. |
 
-The Addy browser skill can use a browser MCP already provided by your client.
-This setup does not install an additional browser server.
+Framework guidance uses `nuxt-modules` and the Nuxt MCP with version `4.x`.
+Browser checks use the existing Playwright Core tests in `test/browser.test.ts`
+and isolated Chromium. Install the test browser with
+`pnpm exec playwright-core install chromium` when absent; no browser MCP is required.
 
 ## Graphify
 
@@ -75,18 +76,18 @@ Canonical skills are committed under `.agents/skills/`, with relative symlinks i
 `.claude/skills/`. A fresh checkout needs no installation command to load them.
 Do not flatten or replace the symlinks with machine-specific absolute paths.
 
-`skills-lock.json` tracks 15 skills in the skills CLI 1.7.6 lock format. The original
-12 were installed with that CLI; `pnpm`, `vite`, and `create-adaptable-composable`
-were added with Codex's `skill-installer` and an explicit project destination.
-Graphify uses
-an upstream packaged skill named `skill-agents.md`, rather than a discoverable
-`SKILL.md`, so it is vendored separately and pinned in `.agents/sources.json`.
+`skills-lock.json` tracks 13 skills in the skills CLI 1.7.6 lock format. The nine
+Addy skills and `nuxt-modules` were installed with that CLI; `pnpm`, `vite`, and
+`create-adaptable-composable` were added with Codex's `skill-installer` and an
+explicit project destination. Graphify uses an upstream packaged skill named
+`skill-agents.md`, rather than a discoverable `SKILL.md`, so it is vendored
+separately and pinned in `.agents/sources.json`.
 That manifest also records all upstream revisions and the Addy reference location.
 
 | Source | Revision | Installed content |
 | --- | --- | --- |
-| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | `301b02b12bff98e4688e6984af6556802322bbde` | Selected 10 skills and shared root references. |
-| [antfu/skills](https://github.com/antfu/skills) | `7de210b51c8d48cc405a4eac3e17cbb1396c653b` | `nuxt`, `pnpm`, `vite`; Nuxt 5 examples require checking against this module's Nuxt 4. |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | `301b02b12bff98e4688e6984af6556802322bbde` | Selected nine skills and shared root references. |
+| [antfu/skills](https://github.com/antfu/skills) | `7de210b51c8d48cc405a4eac3e17cbb1396c653b` | `pnpm`, `vite`. |
 | [onmax/nuxt-skills](https://github.com/onmax/nuxt-skills) | `2e74504f3151b18bf81e8a62cb7f1fa9edb532a4` | `nuxt-modules`. |
 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | `59b5ab1151e031fb42e39cfc9a50bf96f2d57ae0` | Generic agents skill and reference sidecars; runtime pinned to `0.9.102`. |
 | [vuejs-ai/skills](https://github.com/vuejs-ai/skills) | `198f0cd8f7f9c0a3d9b566ccc16de6677519ee78` | `create-adaptable-composable`. |
@@ -144,13 +145,13 @@ maintenance across both clients:
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/addyosmani/agent-skills/tree/301b02b12bff98e4688e6984af6556802322bbde \
   --skill source-driven-development api-and-interface-design test-driven-development \
-  browser-testing-with-devtools debugging-and-error-recovery code-review-and-quality \
+  debugging-and-error-recovery code-review-and-quality \
   security-and-hardening performance-optimization deprecation-and-migration documentation-and-adrs \
   --agent codex claude-code --yes
 
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/antfu/skills/tree/7de210b51c8d48cc405a4eac3e17cbb1396c653b \
-  --skill nuxt pnpm vite --agent codex claude-code --yes
+  --skill pnpm vite --agent codex claude-code --yes
 
 npm exec --yes --package skills@1.7.6 -- skills add \
   https://github.com/onmax/nuxt-skills/tree/2e74504f3151b18bf81e8a62cb7f1fa9edb532a4 \
@@ -176,7 +177,7 @@ revision in a temporary directory. Copy `graphify/skill-agents.md` to
 and keep the Claude link pointing to `../../.agents/skills/graphify`.
 Do not run platform instruction/hook installers over the curated root guides.
 
-After updates, verify both clients discover all 16 skills, resolve every local
+After updates, verify both clients discover all 14 skills, resolve every local
 support-file link, review lockfile/provenance changes, and rebuild the graph only
 if needed. A skills CLI `untracked` label for Graphify means it is maintained by
 the separate provenance manifest, not that it is absent from Git.

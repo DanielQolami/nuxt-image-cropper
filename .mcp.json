@@ -4,10 +4,6 @@
       "type": "http",
       "url": "https://nuxt.com/mcp"
     },
-    "nuxt-ui": {
-      "type": "http",
-      "url": "https://ui.nuxt.com/mcp"
-    },
     "graphify": {
       "type": "stdio",
       "command": "node",

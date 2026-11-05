@@ -6,7 +6,6 @@
       "revision": "301b02b12bff98e4688e6984af6556802322bbde",
       "skills": [
         "api-and-interface-design",
-        "browser-testing-with-devtools",
         "code-review-and-quality",
         "debugging-and-error-recovery",
         "deprecation-and-migration",
@@ -22,11 +21,10 @@
       "repository": "https://github.com/antfu/skills",
       "revision": "7de210b51c8d48cc405a4eac3e17cbb1396c653b",
       "skills": [
-        "nuxt",
         "pnpm",
         "vite"
       ],
-      "installation": "nuxt via skills CLI 1.7.6; pnpm and vite via Codex skill-installer with --dest .agents/skills."
+      "installation": "pnpm and vite via Codex skill-installer with --dest .agents/skills."
     },
     {
       "repository": "https://github.com/onmax/nuxt-skills",
